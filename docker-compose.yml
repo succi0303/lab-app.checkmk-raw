@@ -1,0 +1,21 @@
+version: '3'
+services:
+  checkmk:
+    image: checkmk/check-mk-raw:latest
+    container_name: checkmk-raw
+    restart: always
+    ports:
+      - "5031:5000"
+      - "6556:6556"
+    environment:
+      - CMK_SITE_ID=mysite
+    volumes:
+      - checkmk-data:/opt/omd/sites
+    healthcheck:
+      test: ["CMD", "omd", "status", "mysite"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  checkmk-data:
